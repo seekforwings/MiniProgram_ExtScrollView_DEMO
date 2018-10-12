@@ -1,0 +1,21 @@
+<view class="custom-refresh-view-root"
+    throttle="{{false}}" 
+    animation="{{animationData}}">
+  <view class="custom-refresh-view-header-container" style="height: {{headerHeight}}px; top: -{{headerHeight}}px; line-height: {{headerHeight}}px">
+    header
+  </view>
+  <scroll-view class="custom-refresh-view-root-scroll-view" scroll-y="{{allowScrollY}}" throttle="{{false}}" scroll-top="scrollTop" scroll-with-animation="{{true}}"
+  capture-bind:touchstart="touchstart" 
+  capture-bind:touchend="touchend"
+  capture-bind:touchmove="touchmove"
+  bindscroll="onScroll"
+  bindscrolltoupper="onScrollToUpper"
+  bindscrolltolower="onScrollToLower"
+  upper-threshold="0"
+  lower-threshold="0">
+    <slot name="custom-refresh-view-content"></slot>
+  </scroll-view>
+  <view class="custom-refresh-view-footer-container" style="height: {{footerHeight}}px; bottom: -{{footerHeight}}px; line-height:  {{footerHeight}}px" >
+    footer
+  </view>
+</view>

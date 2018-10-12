@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "ext-scroll-view": "../../comps/ExtScrollView/index"
+  }
+}

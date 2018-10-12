@@ -1,0 +1,36 @@
+.custom-refresh-view-root {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+.custom-refresh-view-root-scroll-view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.custom-refresh-view-header-container {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  background: blue;
+  text-align: center;
+  color: white;
+  display: block;
+}
+
+.custom-refresh-view-footer-container {
+  position: absolute;
+  width: 100%;
+  background: green;
+  text-align: center;
+  color: white;
+  display: block;
+}

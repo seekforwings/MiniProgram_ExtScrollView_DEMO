@@ -1,0 +1,7 @@
+<ext-scroll-view class="ext-scroll-view" headerHeight="100" footerHeight="100">
+  <view slot="custom-refresh-view-content">
+    <view  wx:for="{{items}}" wx:key="index" wx:for-index="index" wx:for-item="item" class="clz_item">
+      {{index+1}}、{{item.title}}
+    </view>
+  </view>
+</ext-scroll-view>

@@ -1,0 +1,23 @@
+/**index.wxss**/
+
+page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;/* need */
+}
+
+.ext-scroll-view {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.clz_item {
+  position: relative;
+  background: red;
+  height: 180rpx;
+  line-height: 160rpx;
+  text-align: center;
+  display: block;
+  margin: 10rpx;
+}
