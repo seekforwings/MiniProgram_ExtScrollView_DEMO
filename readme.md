@@ -1,5 +1,6 @@
 A simple components
 ExtScrollView, a scrollable view that has header and footer
+
 notice: there is a bit diference between android and ios
 
 display:
