@@ -68,6 +68,17 @@ Component({
         })
         return
       }
+      if (!this.$data.touchStarted && (this.$data.scrollToTop || this.$data.scrollToBottom)) {
+        // ios's falling back is unable to disable yet
+        // ios should act like this: onscroll[scrolltop:4->1->0]->onscrolltoupper->onscroll[-1 -> -3 -> -8 -> ... -> -2 -> 0]
+        // but after tested: onscroll[scrolltop:4->0 -> -3]->onscrolltoupper->onscroll[-8 -> ... -> -2 -> 0]
+        // this make it really hard to handle the scrolling state well. I can only say: fuck the mather wechat
+       
+        // once it has scrolled to top/bottom without touch-started, it should be the falling-back action above.
+        // but when touch-start while it is in falling-back action, it seems to show the header/footer very soon.
+        // I think wechat may have to provide the scroll-view's falling-back disability.
+        return
+      }
       this.$data.scrolledAfterTouchStart = true
       this.$data.scrollToTop = false
       this.$data.scrollToBottom = false
