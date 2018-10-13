@@ -58,6 +58,20 @@ Component({
       headerHeight: this.properties.headerHeight,
       footerHeight: this.properties.footerHeight,
     })
+   
+    this.$data.platform = undefined
+    wx.getSystemInfo({
+      success: (res) => {
+        console.log(res)
+        if (res.platform === "ios") {
+          this.$data.platform = 'ios'
+        } else if (res.platform === "android") {
+          this.$data.platform = 'android'
+        } else if (res.platform === 'devtools') {
+          this.$data.platform = 'pc'
+        }
+      }
+    })
   },
 
   methods: {
@@ -96,6 +110,7 @@ Component({
     },
 
     touchstart(ev) {
+      if (!this.$data.platform) { return }
       // avoid touchStarted when it is still performing any animation
       if (this.$data.performingAnimation) { return }
       // we should make sure that scoll-view set data.allowScrollY done before we can translate the root-view
@@ -181,35 +196,33 @@ Component({
       if (this.$data.needPerformAutoAnimation) {
         // if need perform auto animation, bandon other animation
         this.$data.performingAnimation = true
+        let translatedY = 0
+        if (this.$data.scrollToTop) {
+          if (this.$data.lastMovedDeletaY > this.properties.headerHeight / 2) {
+            translatedY = this.properties.headerHeight
+          }
+        } else {
+          if (-this.$data.lastMovedDeletaY > this.properties.footerHeight / 2) {
+            translatedY = -this.properties.footerHeight
+          }
+        }
+        this.processAnimation(translatedY, 320, 'easy-out')
         setTimeout(() => {
-          let translatedY = 0
-          if (this.$data.scrollToTop) {
-            if (this.$data.lastMovedDeletaY > this.properties.headerHeight / 2) {
-              translatedY = this.properties.headerHeight
-            }
+          this.processAnimation(translatedY, 0)
+          this.$data.needPerformAutoAnimation = false
+          this.$data.performingAnimation = false
+          this.$data.headerShown = false
+          this.$data.footerShown = false
+          if (translatedY == 0) {
+            this.setData({ allowScrollY: true }, () => { this.$data.realAllowScrollY = true })
           } else {
-            if (-this.$data.lastMovedDeletaY > this.properties.footerHeight / 2) {
-              translatedY = -this.properties.footerHeight
+            if (translatedY > 0) {
+              this.$data.headerShown = true
+            } else {
+              this.$data.footerShown = true
             }
           }
-          this.processAnimation(translatedY, 320, 'easy-out')
-          setTimeout(() => {
-            this.processAnimation(translatedY, 0)
-            this.$data.needPerformAutoAnimation = false
-            this.$data.performingAnimation = false
-            this.$data.headerShown = false
-            this.$data.footerShown = false
-            if (translatedY == 0) {
-              this.setData({ allowScrollY: true }, () => { this.$data.realAllowScrollY = true })
-            } else {
-              if (translatedY > 0) {
-                this.$data.headerShown = true
-              } else {
-                this.$data.footerShown = true
-              }
-            }
-          }, 320)
-        }, 10)
+        }, this.$data.platform === 'ios' ? 400 : 320)
         return
       }
 
@@ -217,13 +230,17 @@ Component({
       if (this.$data.lastMovedAnimationOrigianlDeltaY != this.$data.lastMovedDeletaY) {
         this.$data.lastMovedAnimationOrigianlDeltaY = this.$data.lastMovedDeletaY
         this.$data.performingAnimation = true
+        let duration = this.$data.platform === 'ios' ? 0 : 160
+        // ios's animation's duration seems to be not so exactly, we don't know when it is done！
+        // so far, setting duration to 0 performs a little bit good on ios
+        // why can wechat create such a large difference between android and ios? how interesting it is!!!
+        this.processAnimation(this.$data.lastMovedAnimationOrigianlDeltaY, duration)
         setTimeout(() => {
-          this.processAnimation(this.$data.lastMovedAnimationOrigianlDeltaY, 160)
-          setTimeout(() => {
-            this.$data.performingAnimation = false
-            this.performAnimationIfNeed()
-          }, 160)
-        }, 10)
+          console.log('try performAnimationIfNeed after process Animation')
+          console.log(JSON.stringify(new Date()))
+          this.$data.performingAnimation = false
+          this.performAnimationIfNeed()
+        }, duration)
       }
     },
 
