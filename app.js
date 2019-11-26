@@ -1,4 +1,3 @@
-// test_edit_by_newmandirl_12
 // test_edit_by_newmandirl_11
 // test_edit_by_newmandirl_10
 // test_edit_by_newmandirl_9
